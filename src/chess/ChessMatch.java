@@ -33,8 +33,8 @@ public class ChessMatch {
 	}
 	private void validateSourcePosition(Position position) {
 		if (!board.thereIsAPiece(position)) {
-			throw new ChessException("There is no piece on source position");
-		}
+			throw new ChessException("Nao ha nenhuma peca na posicao de origem");
+		}							//There is no piece on source position
 	}
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source);
