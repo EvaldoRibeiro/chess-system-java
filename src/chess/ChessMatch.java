@@ -35,6 +35,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("Nao ha nenhuma peca na posicao de origem");
 		}							//There is no piece on source position
+		if (!board.piece(position).isThereAnyPossibleMove()) {
+			throw new ChessException("Nao existe movimento possiveis para a peca escolhida");
+		}							//There is no possible moves for the chosen piece
 	}
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source);
