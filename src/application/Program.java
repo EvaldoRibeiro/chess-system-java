@@ -33,7 +33,7 @@ public class Program {
 				System.out.print("Destino: "); //Target
 				ChessPosition target = UI.readChessPosition(sc);
 				 
-				ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
+	 			ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
 				
 				if (capturedPiece != null) {
 					captured.add(capturedPiece);
@@ -48,8 +48,7 @@ public class Program {
 			catch(InputMismatchException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();
-				
-			}
+			} 
 		}
 	}
 }
