@@ -1,6 +1,5 @@
 package chess;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +56,7 @@ public class ChessMatch {
 	public ChessPiece getEnPassantVulnerable() {
 		return enPassantVulnerable;
 	}
+
 	public ChessPiece getPromoted() {
 		return promoted;
 	}
@@ -90,14 +90,15 @@ public class ChessMatch {
 		}
 
 		ChessPiece movedPiece = (ChessPiece) board.piece(target);
-		
-		//# specialmove promotion
+
+		// # specialmove promotion
 		promoted = null;
-		if(movedPiece instanceof Pawn) {
-			if((movedPiece.getColor() == Color.WHITE && target.getRow() == 0) || (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)) {
-				promoted = (ChessPiece)board.piece(target);
+		if (movedPiece instanceof Pawn) {
+			if ((movedPiece.getColor() == Color.WHITE && target.getRow() == 0)
+					|| (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)) {
+				promoted = (ChessPiece) board.piece(target);
 				promoted = replacePromotedPiece("Q");
-				
+
 			}
 		}
 
@@ -123,45 +124,49 @@ public class ChessMatch {
 	private void validateSourcePosition(Position position) {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("Nao ha nenhuma peca na posicao de origem");
-		}                          // There is no piece on source position
+		} // There is no piece on source position
 		if (currentPlayer != ((ChessPiece) board.piece(position)).getColor()) {
 			throw new ChessException("A peca escolhida nao e sua");
-			                        // The chosen piece is not yours
+			// The chosen piece is not yours
 		}
 		if (!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("Nao existe movimento possiveis para a peca escolhida");
-		}                           // There is no possible moves for the chosen piece
+		} // There is no possible moves for the chosen piece
 	}
 
 	private void validateTargetPosition(Position source, Position target) {
 		if (!board.piece(source).possibleMoves(target)) {
 			throw new ChessException("A peca escolhida nao pode ser mover para posicao de destino");
-		}                           // The chosen piece can't move to target position
+		} // The chosen piece can't move to target position
 	}
+
 	public ChessPiece replacePromotedPiece(String type) {
-		if(promoted == null) {
+		if (promoted == null) {
 			throw new IllegalStateException("Nao ha peca para ser promovida");
-										//There is not piece to be prometed
+			// There is not piece to be prometed
 		}
-		if(!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {
-			throw new InvalidParameterException("Tipo inválido para promocao");
-												//Invalid type for promotion
+		if (!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {
+			return promoted;
 		}
 		Position pos = promoted.getChessPosition().toPosition();
 		Piece p = board.removePiece(pos);
 		piecesOnTheBoard.remove(p);
-		
+
 		ChessPiece newPiece = newPiece(type, promoted.getColor());
 		board.placePiece(newPiece, pos);
 		piecesOnTheBoard.add(newPiece);
-		
+
 		return newPiece;
-		
+
 	}
-	private ChessPiece newPiece (String type, Color color) {
-		if(type.equals("B")) return new Bishop(board, color);
-		if(type.equals("N")) return new Knight(board, color);
-		if(type.equals("Q")) return new Queen(board, color);
+
+	private ChessPiece newPiece(String type, Color color) {
+		if (type.equals("B"))
+			return new Bishop(board, color);
+		if (type.equals("N"))
+			return new Knight(board, color);
+		if (type.equals("Q"))
+			return new Queen(board, color);
 		return new Rook(board, color);
 	}
 
@@ -240,7 +245,7 @@ public class ChessMatch {
 		// # specialmove en passant
 		if (p instanceof Pawn) {
 			if (source.getColumn() != target.getColumn() && capturedPiece == enPassantVulnerable) {
-				ChessPiece pawn = (ChessPiece)board.removePiece(target);
+				ChessPiece pawn = (ChessPiece) board.removePiece(target);
 				Position pawPosition;
 				if (p.getColor() == Color.WHITE) {
 					pawPosition = new Position(3, target.getColumn());
@@ -248,7 +253,7 @@ public class ChessMatch {
 					pawPosition = new Position(4, target.getColumn());
 				}
 				board.placePiece(pawn, pawPosition);
-				
+
 			}
 		}
 	}
